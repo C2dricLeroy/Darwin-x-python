@@ -1,13 +1,13 @@
 import pandas as pd
+from flask import jsonify
 
 
 class UserService:
-    investors_dafaframe = pd.read_csv('../data/sanitized_investors.csv')
-    performance_dataframe = pd.read_csv('../data/sanitized_performance.csv')
 
     def get_user_informations(self, investor_id):
         try:
-            return self.compute_value(investor_id)
+            return self.get_user(investor_id)
+            # return self.compute_value(investor_id)
         except Exception as e:
             return "An error as occured"
 
@@ -27,3 +27,11 @@ class UserService:
         # Format in JSON
         # return JSON
 
+    def get_user(self, investor_id):
+        investor_id = int(investor_id)
+
+        investors_dafaframe = pd.read_csv('../data/sanitized_investors.csv')
+        performance_dataframe = pd.read_csv('../data/sanitized_performance.csv')
+
+        investor = investors_dafaframe.loc[investors_dafaframe['id'] == investor_id]
+        return jsonify(investor)
